@@ -19,7 +19,7 @@ public class RockPaperScissors {
     /** The MainScene of the game */
     private MainScene game;
 
-    /** The GameOverScenee to display the winner */
+    /** The GameOverScene to display the winner */
     private GameOverScene gameOver;
 
     /** The GameLogic to handle the game logic */

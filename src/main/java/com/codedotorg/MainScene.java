@@ -37,17 +37,19 @@ public class MainScene {
     /** The loading animation while the camera is loading */
     private Loading cameraLoading;
 
+    /** Whether or not this is the first time the camera has loaded */
+    private boolean firstCapture;
+
     /**
      * Constructs a new MainScene object.
      * Initializes the cameraView, progress, exitButton, titleLabel, computerChoiceLabel,
-     * predictionLabel, promptLabel, and cameraLoadingLabel.
+     * predictionLabel, promptLabel, cameraLoadingLabel, and firstCapture.
      */
     public MainScene() {
         cameraView = new ImageView();
         cameraView.setId("camera");
 
         exitButton = new Button("Exit");
-        
         
         titleLabel = new Label("Rock, Paper, Scissors");
         titleLabel.setId("titleLabel");
@@ -56,7 +58,8 @@ public class MainScene {
         predictionLabel = new Label("");
         promptLabel = new Label("Make your choice!");
 
-        cameraLoading = new Loading();   
+        cameraLoading = new Loading();  
+        firstCapture = true; 
     }
 
     /**
@@ -66,15 +69,6 @@ public class MainScene {
      */
     public ImageView getCameraView() {
         return cameraView;
-    }
-
-    /**
-     * Returns the root layout.
-     * 
-     * @return the VBox for the root layout
-     */
-    public VBox getRootLayout() {
-        return rootLayout;
     }
 
     /**
@@ -110,12 +104,35 @@ public class MainScene {
         rootLayout.getChildren().addAll(titleLabel, promptLabel, cameraLoading.getCameraLoadingLabel(),
             cameraSpacer1, cameraView, cameraSpacer2, cameraLoading.getProgressIndicator(), computerChoiceLabel, predictionLabel, buttonSpacer, exitButton);
 
+        if (!isFirstCapture()) {
+            cameraLoading.hideLoadingAnimation(rootLayout, cameraView);
+        }
+        else {
+            setFirstCaptureFalse();
+        }
+
         // Creates a new scene and set the layout as its root
         Scene mainScene = new Scene(rootLayout, 600, 750);
         mainScene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
 
         // Returns the main scene
         return mainScene;
+    }
+
+    /**
+     * Returns whether this is the first capture of the game.
+     * 
+     * @return true if this is the first capture, false otherwise.
+     */
+    public boolean isFirstCapture() {
+        return firstCapture;
+    }
+    
+    /**
+     * Sets the boolean value of firstCapture to false.
+     */
+    public void setFirstCaptureFalse() {
+        this.firstCapture = false;
     }
 
     /**
@@ -129,7 +146,14 @@ public class MainScene {
         });
     }
 
+    /**
+     * Displays the predicted user response on the UI.
+     * 
+     * @param predictedClass The predicted class of the user response.
+     * @param predictedScore The predicted score of the user response.
+     */
     public void showUserResponse(String predictedClass, double predictedScore) {
+        // Hide the loading animation
         cameraLoading.hideLoadingAnimation(rootLayout, cameraView);
         
         // Get the predicted class without the leading number
@@ -141,6 +165,7 @@ public class MainScene {
         // Create a String with the predicted class and confidence score
         String userResult = "User: " + user + " (" + percentage + "% Confidence)";
 
+        // Update the predictionLabel to show the user's response and score
         Platform.runLater(() -> predictionLabel.setText(userResult));
     }
 

@@ -16,35 +16,48 @@ public class GameOverScene {
     /** Button to exit the app */
     private Button exitButton;
 
+    /**
+     * Constructs a GameOverScene object with an exit
+     * button and a play again button.
+     */
     public GameOverScene() {
         exitButton = new Button("Exit");
         playAgainButton = new Button("Play Again");
     }
 
     /**
-     * Returns a Scene object that displays a message indicating who won
-     * 
-     * @param winner The text containing who won.
-     * @param primaryStage The primary stage of the JavaFX application.
-     * @param cameraController The CameraController object used to control the camera in the 3D scene.
-     * @return A Scene object that displays a message indicating who won the game.
+     * Creates a new Scene object for the game over screen.
+     * @param winner The name of the winner of the game.
+     * @param cameraController The CameraController object used in the game.
+     * @return A Scene object representing the game over screen.
      */
     public Scene createGameOverScene(String winner, CameraController cameraController) {
+        // Set the action for when the exit button is clicked
         createExitButtonAction(cameraController);
         
+        // Create the layout for the scene
         VBox layout = new VBox(20);
         layout.setAlignment(Pos.CENTER);
 
+        // Create the label to display the winner
         Label winnerLabel = new Label(winner);
 
+        // Add the label and buttons to the layout
         layout.getChildren().addAll(winnerLabel, playAgainButton, exitButton);
 
+        // Create the scene with the layout
         Scene gameOverScene = new Scene(layout, 600, 750);
         gameOverScene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
 
+        // Return the scene
         return gameOverScene;
     }
 
+    /**
+     * Returns the play again button.
+     * 
+     * @return the play again button
+     */
     public Button getPlayAgainButton() {
         return playAgainButton;
     }
